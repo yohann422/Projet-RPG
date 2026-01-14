@@ -14,3 +14,6 @@ export let quests = [
 ]
 
 export let nextId = 3; // Pour générer les IDs automatiquement
+export function incrementId(){
+  nextId++
+}
