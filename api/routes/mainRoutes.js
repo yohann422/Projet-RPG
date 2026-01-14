@@ -1,3 +1,7 @@
-import express from "express";
+import express, { Router } from "express"
+import { questsRouter } from "./questRoutes.js"
 
-export const mainRouter = router();
+
+export const mainRoutes = express.Router()
+// pour toutes les routes quests
+mainRoutes.use("/quests",questsRouter)
