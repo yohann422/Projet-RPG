@@ -4,5 +4,6 @@ import { sequelize } from "../config/database.js";
 import { Quests } from "./Quests.js";
 
 export {
-  Quests
+  Quests,
+  sequelize
 }
