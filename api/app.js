@@ -1,6 +1,7 @@
 import express  from "express";
 import "dotenv/config"
 import {mainRoutes} from "./routes/mainRoutes.js"
+import { sequelize, testconnection } from "./models/index.js"
 
 const app = express();
 
@@ -8,7 +9,7 @@ const app = express();
 // Il permet d'accéder aux données envoyées dans req.body
 app.use(express.json()),
 
-
+// on appel mainRoutes qui se trouve dans le dossier routes
 app.use(mainRoutes)
 
 const port = process.env.PORT || 3000;
