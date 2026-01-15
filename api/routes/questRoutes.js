@@ -40,21 +40,29 @@ questsRouter.post("/", async (req, res) => {
   }
 });
 
-questsRouter.put("/:id", (req, res) => {
-  //aller chercher l id dans l url
-  const questId = Number(req.params.id);
-  // aller chercher le body
-  const { title, description, status } = req.body;
-  // trouver la quete
-  const questModif = quests.find((q) => q.id === questId);
-  //verifier si elle existe
-  if (!questModif) {
-    return res.status(404).json({ message: "erreur quete non trouver" });
+questsRouter.put("/:id", async (req, res) => {
+  try {
+    //aller chercher l id dans l url
+    const questId = req.params.id;
+    // aller chercher le body
+    const { title, description, status } = req.body;
+    // trouver la quete
+    const questModif = await Quests.findByPk(questId);
+    //verifier si elle existe
+    if (!questModif) {
+      return res.status(404).json({ message: "erreur quete non trouver" });
+    }
+    // pour modifier on vas chercher la variable questModif
+    await questModif.update({
+      title,
+      description,
+      status
+    })
+    res.status(200).json({ message: "Modification des quêtes", questModif });
+    
+  } catch (error) {
+    res.status(500).json({ message: "Erreur lors de la modification de quête" });
   }
-  questModif.title = title;
-  questModif.description = description;
-  questModif.status = status;
-  res.json({ message: "Modification des quêtes", questModif });
 });
 
 questsRouter.delete("/:id", (req, res) => {
