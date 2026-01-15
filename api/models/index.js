@@ -1,1 +1,1 @@
-import { sequelize } from "./sequelize-client.js";
+// si il y a des relations avec les tables le code ici

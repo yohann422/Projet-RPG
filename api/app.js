@@ -1,7 +1,7 @@
 import express  from "express";
 import "dotenv/config"
 import {mainRoutes} from "./routes/mainRoutes.js"
-import { sequelize, testconnection } from "./models/index.js"
+import { sequelize, testConnection } from "./config/database.js"
 
 const app = express();
 
@@ -11,6 +11,8 @@ app.use(express.json()),
 
 // on appel mainRoutes qui se trouve dans le dossier routes
 app.use(mainRoutes)
+
+testConnection()
 
 const port = process.env.PORT || 3000;
 app.listen(port, () =>{
