@@ -36,6 +36,8 @@ export const testConnection = async () => {
   try {
     await sequelize.authenticate();
     console.log('✅ Connexion à PostgreSQL établie avec succès');
+    await sequelize.sync({ force: true }); //  force: true = supprimer les tables existantes puis les recréer
+    console.log("✅ All models were synchronized successfully");
   } catch (error) {
     console.error('❌ Impossible de se connecter à la base de données:', error);
     throw error;

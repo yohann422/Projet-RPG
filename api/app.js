@@ -12,9 +12,21 @@ app.use(express.json()),
 // on appel mainRoutes qui se trouve dans le dossier routes
 app.use(mainRoutes)
 
-testConnection()
 
-const port = process.env.PORT || 3000;
-app.listen(port, () =>{
-  console.log(`🚀 Server running at http://localhost:${port}`)
-})
+const startServer = async ()=>{
+  try {
+    await testConnection()
+    
+    const port = process.env.PORT || 3000;
+    app.listen(port, () =>{
+      console.log(`🚀 Server running at http://localhost:${port}`)
+    });
+    
+  } catch (error) {
+    console.error('❌ Erreur au démarrage:', error);
+    process.exit(1);
+  }
+};
+
+startServer();
+

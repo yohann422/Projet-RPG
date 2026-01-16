@@ -1,5 +1,5 @@
 import express from "express";
-import { quests, nextId, incrementId } from "../database/listQuests.js";
+// import { quests, nextId, incrementId } from "../database/listQuests.js";
 import { Quests } from "../models/Quests.js";
 
 export const questsRouter = express.Router();
@@ -65,28 +65,36 @@ questsRouter.put("/:id", async (req, res) => {
   }
 });
 
-questsRouter.delete("/:id", (req, res) => {
-  // il faut aller chercher l'id du params
-  const questId = Number(req.params.id);
-
-  // trouver la quete a supprimer
-  const questDelete = quests.find((q) => q.id === questId);
-  // on vérifie qu'elle existe
-  if (!questDelete) {
-    return res.status(404).json({ message: "erreur quete non trouver" });
+questsRouter.delete("/:id", async(req, res) => {
+  try {
+    // il faut aller chercher l'id du params
+    const questId = req.params.id;
+    // trouver la quete a supprimer grace a son ID dans le params
+    const questDelete = await Quests.findByPk(questId);
+    // on vérifie qu'elle existe
+    if (!questDelete) {
+      return res.status(404).json({ message: "erreur quete non trouver" });
+    }
+    //on la supprime
+    await questDelete.destroy()
+    // on affiche les autres quetes pas obligatoire
+    const quest = await Quests.findAll()
+    // on la supprime et on garde toutes les autres
+    // const quest = quests.findIndex();
+    //  return res.json({
+    //   DEBUG: {
+    //     questIdRecu: questId,
+    //     typeQuestId: typeof questId,
+    //     questTrouve: quest,
+    //     questeTrouvee: questDelete,
+    //     tousLesIds: quests.map(q => ({ id: q.id, type: typeof q.id }))
+    //   }
+    // });
+    // quests.splice(quest, 1);
+  
+    res.json({ message: "Suppressions des quêtes", questDelete, quest });
+    
+  } catch (error) {
+    res.status(500).json({ message: "Erreur lors de la suppression de quête" });
   }
-  // on la supprime et on garde toutes les autres
-  const quest = quests.findIndex((q) => q.id === questId);
-  //  return res.json({
-  //   DEBUG: {
-  //     questIdRecu: questId,
-  //     typeQuestId: typeof questId,
-  //     questTrouve: quest,
-  //     questeTrouvee: questDelete,
-  //     tousLesIds: quests.map(q => ({ id: q.id, type: typeof q.id }))
-  //   }
-  // });
-  quests.splice(quest, 1);
-
-  res.json({ message: "Suppressions des quêtes", questDelete });
 });
